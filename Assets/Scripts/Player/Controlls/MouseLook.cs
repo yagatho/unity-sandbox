@@ -15,8 +15,9 @@ namespace Project.Player.Controlls
 
 
         //INIT
-        public MouseLook(Player player){
-            myPlayer = player;            
+        public MouseLook(Player player)
+        {
+            myPlayer = player;
 
             CursorLock();
         }
@@ -35,10 +36,10 @@ namespace Project.Player.Controlls
             //Rotate player main object on y axis by yaw
             myPlayer.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
             //Arm sway
-            if(moveDelta.x!=0)
-                myPlayer.armsTransform.localRotation *= Quaternion.Euler(0f, -moveDelta.x/100 * Player.armSwayStrenght, 0f);
+            if (moveDelta.x != 0)
+                myPlayer.armsTransform.localRotation *= Quaternion.Euler(0f, -moveDelta.x / 100 * Player.armSwayStrenght, 0f);
             //Slerp back arms to normal position
-            myPlayer.armsTransform.localRotation = Quaternion.Slerp(myPlayer.armsTransform.localRotation,Quaternion.identity,Time.deltaTime*Player.armLerpSpeed);
+            myPlayer.armsTransform.localRotation = Quaternion.Slerp(myPlayer.armsTransform.localRotation, Quaternion.identity, Time.deltaTime * Player.armLerpSpeed);
 
             //Rotate the spine bone by pitch on x axis
             myPlayer.cameraSpine.localRotation = Quaternion.Euler(pitch, myPlayer.cameraSpine.localEulerAngles.y, myPlayer.cameraSpine.localEulerAngles.z);

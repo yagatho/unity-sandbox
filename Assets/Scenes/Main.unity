@@ -1268,7 +1268,7 @@ GameObject:
   - component: {fileID: 7239777490291244694}
   - component: {fileID: 6046815298617319117}
   m_Layer: 0
-  m_Name: Paladin_J_Nordstrom_Helmet
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4176,7 +4176,7 @@ GameObject:
   - component: {fileID: 1815984469628259398}
   - component: {fileID: 2356669391460624647}
   m_Layer: 6
-  m_Name: Paladin_J_Nordstrom_Helmet.001
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4775,7 +4775,7 @@ GameObject:
   - component: {fileID: 2442436738472764860}
   - component: {fileID: 9147893276077376164}
   m_Layer: 6
-  m_Name: Paladin_J_Nordstrom
+  m_Name: Helmet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

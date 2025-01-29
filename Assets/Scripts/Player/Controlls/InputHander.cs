@@ -2,7 +2,8 @@ using Project.Player.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Project.Player.Controlls{
+namespace Project.Player.Controlls
+{
     public class InputHandler
     {
         //VARS
@@ -42,7 +43,8 @@ namespace Project.Player.Controlls{
             controlsActions.Player.ADS.started += ADS;
         }
 
-        private void InitializeStates(){
+        private void InitializeStates()
+        {
             moveState = new Move(this, myPlayer.myRigidbody);
             idleState = new Idle(this);
             mouseLook = new MouseLook(myPlayer);
@@ -103,4 +105,4 @@ namespace Project.Player.Controlls{
             animHandler.Zoom();
         }
     }
-} 
+}
