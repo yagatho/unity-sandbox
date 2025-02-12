@@ -2,8 +2,9 @@ using Project.Systems.StateMachine;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Project.Player.Controlls{
-    public class Move: State
+namespace Project.Player.Controlls
+{
+    public class Move : State
     {
         //Variables
         private InputHandler input;
@@ -34,6 +35,9 @@ namespace Project.Player.Controlls{
 
         public override State Exit()
         {
+            if (input.jump == true)
+                return input.jumpState;
+
             if (input.moveValue == Vector2.zero)
                 return input.idleState;
 
@@ -62,7 +66,8 @@ namespace Project.Player.Controlls{
             AcceleratedPositionRun(new Vector3(movementDelta.x * Player.maxRuningVelocity, body.linearVelocity.y, movementDelta.y * Player.maxRuningVelocity), body);
         }
 
-        private void AcceleratedPosition(Vector3 vectorToAccelerate, Rigidbody body){
+        private void AcceleratedPosition(Vector3 vectorToAccelerate, Rigidbody body)
+        {
             input.interpolationStep += Time.deltaTime * Player.acceleration;
             body.linearVelocity = Vector3.Lerp(input.interpolationBase, targetBody.transform.TransformDirection(vectorToAccelerate), input.interpolationStep);
         }
@@ -73,11 +78,13 @@ namespace Project.Player.Controlls{
         }
     }
 
-    public class Idle: State{
+    public class Idle : State
+    {
         private InputHandler input;
 
         //Initialize
-        public Idle(InputHandler _myInput){
+        public Idle(InputHandler _myInput)
+        {
             input = _myInput;
         }
 
@@ -92,11 +99,73 @@ namespace Project.Player.Controlls{
 
         public override State Exit()
         {
-            if(input.moveValue != Vector2.zero)
+            if (input.jump == true)
+                return input.jumpState;
+
+
+            if (input.moveValue != Vector2.zero)
                 return input.moveState;
-            
+
             return this;
         }
     }
+    public class Jump : State
+    {
+        private InputHandler input;
+        private Rigidbody myRigidbody;
+        private bool isGrounded = true;
+        private bool canGroundAgain = false;
+
+        private static float hitGroundDistance = 0.9f;
+
+        //Initialize
+        public Jump(InputHandler _myInput, Rigidbody _myRigidbody)
+        {
+            input = _myInput;
+            myRigidbody = _myRigidbody;
+        }
+
+        //STATE MACHINE
+        public override void Enter()
+        {
+            if (isGrounded)
+                myRigidbody.AddForce(Vector3.up * 500 * Settings.jumpForce, ForceMode.Impulse);
+
+            isGrounded = false;
+        }
+
+        public override void Update()
+        {
+            RaycastHit hit;
+            LayerMask mask = LayerMask.GetMask("Ground");
+
+            if (Physics.Raycast(myRigidbody.transform.position, Vector3.down, out hit, Mathf.Infinity, mask) && hit.distance < hitGroundDistance && canGroundAgain)
+            {
+                input.jump = false;
+                canGroundAgain = false;
+                isGrounded = true;
+
+                input.ChangePlayerState();
+            }
+
+            //Check if player reached enought height to ground him again
+            if (hit.distance > hitGroundDistance + .1f)
+                canGroundAgain = true;
+        }
+
+        public override State Exit()
+        {
+            if (input.moveValue != Vector2.zero && !input.jump)
+            {
+                return input.moveState;
+            }
+            if (input.moveValue == Vector2.zero && !input.jump)
+                return input.idleState;
+
+
+            return this;
+        }
+    }
+
 
 }

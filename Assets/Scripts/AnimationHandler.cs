@@ -30,6 +30,11 @@ namespace Project.Player.Animations
                 myAnimator.SetBool("Run", false);
         }
 
+        public void PeekAnim(float peekDelta)
+        {
+            myAnimator.SetFloat("Peek", peekDelta);
+        }
+
         public void Zoom()
         {
             myAnimator.SetFloat("ADSSpeed", Player.adsSpeed);

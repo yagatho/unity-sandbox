@@ -4,10 +4,11 @@ using Project.Systems.StateMachine;
 using System.Collections.Generic;
 using Project.Player.CameraC;
 
-namespace Project.Player{
+namespace Project.Player
+{
     [RequireComponent(typeof(Rigidbody))]
     public class Player : MonoBehaviour
-    {   
+    {
         //VARS
         //--Statistics
         //---Basic Movement
@@ -53,12 +54,15 @@ namespace Project.Player{
             input.InitializeInput(this);
         }
 
-        private void Update(){
+        private void Update()
+        {
             //Update the state machine
             stateMachine.Update();
+            Debug.Log(stateMachine.GetState());
         }
 
-        private void LateUpdate(){
+        private void LateUpdate()
+        {
             input.LateUpdate();
             cameraController.LateUpdate();
         }
