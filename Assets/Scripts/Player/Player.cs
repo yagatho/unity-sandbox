@@ -10,31 +10,25 @@ namespace Project.Player
     public class Player : MonoBehaviour
     {
         //VARS
-        //--Statistics
-        //---Basic Movement
-        [SerializeField] public const float maxWalkingVelocity = 2f;
-        [SerializeField] public const float maxRuningVelocity = 5f;
-        [SerializeField] public const float acceleration = 3f;
-        [SerializeField] public const float runAcceleration = 1f;
-        //---Mouse Look
-        [SerializeField] public const float mouseSensitivity = 6f;
-        [SerializeField] public const float armLerpSpeed = 5f;
-        [SerializeField] public const float armSwayStrenght = .5f;
-        [SerializeField] public const float adsSpeed = 1f;
-
-        //--Refrences
-        public Transform cameraSpine;
-        public Transform armsTransform;
+        //-- Inspector
+        [Header("Global")]
+        public ControllerType characterControllerType = ControllerType.FPS;
         public List<Transform> virtualCameras;
 
-        //--Hidden
+        [Header("FPS")]
+        public Transform cameraSpine;
+        public Transform armsTransform;
+
+        [Header("Souls-like")]
+        public Transform SLcameraAnchor;
+
+        //-- Hidden
         [HideInInspector] public Rigidbody myRigidbody;
         [HideInInspector] public Animator myAnimator;
         [HideInInspector] public Camera myCamera;
         [HideInInspector] public StateMachine stateMachine;
         [HideInInspector] public CameraController cameraController;
         private InputHandler input;
-
 
 
         //UNITY FUNCTIONS
@@ -44,13 +38,12 @@ namespace Project.Player
             myCamera = GetComponentInChildren<Camera>();
             myAnimator = GetComponentInChildren<Animator>();
 
-
             //Initialzie statemachine
             stateMachine = new StateMachine();
 
             //Initialize input handler
             input = new InputHandler();
-            cameraController = new CameraController(virtualCameras, myCamera);
+            cameraController = new CameraController(virtualCameras, myCamera, this);
             input.InitializeInput(this);
         }
 
@@ -68,4 +61,9 @@ namespace Project.Player
         }
     }
 
+    public enum ControllerType
+    {
+        FPS,
+        Soulslike
+    }
 }

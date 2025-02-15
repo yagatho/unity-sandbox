@@ -1,4 +1,5 @@
 using UnityEngine;
+using Project.SettingsGroup;
 
 namespace Project.Player.Animations
 {
@@ -37,7 +38,7 @@ namespace Project.Player.Animations
 
         public void Zoom()
         {
-            myAnimator.SetFloat("ADSSpeed", Player.adsSpeed);
+            myAnimator.SetFloat("ADSSpeed", Settings.adsSpeed);
 
             if (myAnimator.GetBool("ADS"))
                 myAnimator.SetBool("ADS", false);

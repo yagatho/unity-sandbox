@@ -1,4 +1,5 @@
 using Project.Player.Animations;
+using Project.SettingsGroup;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
@@ -21,8 +22,6 @@ namespace Project.Player.Controlls
         //--Inputs Move
         public Vector2 moveValue = Vector2.zero;
         public bool canRun = false;
-        public Vector3 interpolationBase = Vector3.zero;
-        public float interpolationStep = 0;
 
         //--Jumping
         public bool jump = false;
@@ -50,53 +49,57 @@ namespace Project.Player.Controlls
             controlsActions.Player.Run.started += RunButtonHold;
             controlsActions.Player.Run.canceled += RunButtonHoldStop;
 
-            controlsActions.Player.ADS.started += ADS;
-
-            controlsActions.Player.Peek.started += Peek;
-            controlsActions.Player.Peek.canceled += PeekStop;
-
             controlsActions.Player.Jump.started += Jump;
+
+            //Movement model exclusive actions
+            switch (myPlayer.characterControllerType)
+            {
+                case ControllerType.FPS:
+
+                    controlsActions.Player.ADS.started += ADS;
+
+                    controlsActions.Player.Peek.started += Peek;
+                    controlsActions.Player.Peek.canceled += PeekStop;
+                    break;
+
+                case ControllerType.Soulslike:
+                    break;
+            }
         }
 
         private void InitializeStates()
         {
-            moveState = new Move(this, myPlayer.myRigidbody);
+            moveState = new Move(this, myPlayer.myRigidbody, myPlayer.myAnimator);
             idleState = new Idle(this);
-            jumpState = new Jump(this, myPlayer.myRigidbody);
-            mouseLook = new MouseLook(myPlayer);
+            jumpState = new Jump(this, myPlayer.myRigidbody, myPlayer.myAnimator);
+            mouseLook = new MouseLook(myPlayer, this);
             animHandler = new AnimationHandler(myPlayer.myAnimator);
 
             myPlayer.stateMachine.Start(idleState);
         }
 
+        //Used currently only for mouse movement
         public void LateUpdate()
         {
             mouseLook.LookAround(controlsActions.Player.Look.ReadValue<Vector2>());
         }
 
 
-
         //INPUT ACTIONS
         private void MovementStartAction(InputAction.CallbackContext context)
         {
-            //Grab old rigidbody velocity as interpolation anchor
-            interpolationStep = 0;
-            interpolationBase = myPlayer.myRigidbody.linearVelocity;
-
             //Start new movement call coroutine
             moveValue = context.ReadValue<Vector2>();
             myPlayer.stateMachine.ChangeState();
         }
+
         private void MovementAction(InputAction.CallbackContext context)
         {
-            //Grab old rigidbody velocity as interpolation anchor
-            interpolationStep = 0;
-            interpolationBase = myPlayer.myRigidbody.linearVelocity;
-
             //Start new movement call coroutine
             moveValue = context.ReadValue<Vector2>();
             MoveAnimLerp(moveValue, canRun);
         }
+
         private void MovementStopAction(InputAction.CallbackContext context)
         {
             moveValue = Vector2.zero;
@@ -109,31 +112,41 @@ namespace Project.Player.Controlls
             canRun = true;
             MoveAnimLerp(moveValue, canRun);
         }
+
         private void RunButtonHoldStop(InputAction.CallbackContext context)
         {
             canRun = false;
             MoveAnimLerp(moveValue, canRun);
         }
-        private void ADS(InputAction.CallbackContext context)
-        {
-            myPlayer.cameraController.SwitchADS();
-            animHandler.Zoom();
-        }
-        private void Peek(InputAction.CallbackContext context)
-        {
-            float peekDelta = context.ReadValue<float>();
-            PeekAnimLerp(peekDelta);
-        }
-        private void PeekStop(InputAction.CallbackContext context)
-        {
-            PeekAnimLerp(0);
-        }
+
         private void Jump(InputAction.CallbackContext context)
         {
             jump = true;
 
             myPlayer.stateMachine.ChangeState();
         }
+
+
+        //FPS exclusive
+        private void ADS(InputAction.CallbackContext context)
+        {
+            myPlayer.cameraController.SwitchADS();
+            animHandler.Zoom();
+        }
+
+        private void Peek(InputAction.CallbackContext context)
+        {
+            float peekDelta = context.ReadValue<float>();
+            PeekAnimLerp(peekDelta);
+        }
+
+        private void PeekStop(InputAction.CallbackContext context)
+        {
+            PeekAnimLerp(0);
+        }
+
+        //Souls-like exclusive
+
 
         //Interpolation for move animation
         private void MoveAnimLerp(Vector2 moveDelta, bool canRun)
