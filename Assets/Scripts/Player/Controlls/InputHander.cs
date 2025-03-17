@@ -1,5 +1,4 @@
 using Project.Player.Animations;
-using Project.SettingsGroup;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
@@ -26,11 +25,17 @@ namespace Project.Player.Controlls
         //--Jumping
         public bool jump = false;
 
-        //--Helers
+        //--Shooting
+        public Shooting shootingModule;
+
+        //--Helpers
         private Coroutine moveAnimInterpolation;
         private Coroutine peekAnimInterpolation;
         private float currentMoveX = 0;
         private float currentPeek = 0;
+
+        //--Debug
+        private DebugManager debugMan;
 
 
         //FUNCTIONS
@@ -39,8 +44,14 @@ namespace Project.Player.Controlls
             controlsActions = new PlayerControlls();
             controlsActions.Player.Enable();
 
+            debugMan = GameObject.FindAnyObjectByType<DebugManager>();
+
             myPlayer = _player;
             InitializeStates();
+
+
+            //Modules
+            shootingModule = new Shooting(myPlayer, mouseLook);
 
             controlsActions.Player.Move.started += MovementStartAction;
             controlsActions.Player.Move.performed += MovementAction;
@@ -50,6 +61,7 @@ namespace Project.Player.Controlls
             controlsActions.Player.Run.canceled += RunButtonHoldStop;
 
             controlsActions.Player.Jump.started += Jump;
+            controlsActions.Player.Console.started += debugMan.ChangeConsoleState;
 
             //Movement model exclusive actions
             switch (myPlayer.characterControllerType)
@@ -60,6 +72,9 @@ namespace Project.Player.Controlls
 
                     controlsActions.Player.Peek.started += Peek;
                     controlsActions.Player.Peek.canceled += PeekStop;
+
+                    controlsActions.Player.Fire.started += shootingModule.Shoot;
+                    controlsActions.Player.Fire.canceled += shootingModule.ShootStop;
                     break;
 
                 case ControllerType.Soulslike:

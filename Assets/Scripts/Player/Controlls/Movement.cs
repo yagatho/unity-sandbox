@@ -1,6 +1,5 @@
 using Project.Systems.StateMachine;
 using UnityEngine;
-using Project.SettingsGroup;
 
 namespace Project.Player.Controlls
 {
@@ -20,6 +19,8 @@ namespace Project.Player.Controlls
             input = _myInput;
             targetBody = _targetBody;
             anim = _anim;
+
+            Lookup.playerRb = targetBody;
         }
 
 
@@ -35,6 +36,7 @@ namespace Project.Player.Controlls
                 RunLogic(input.moveValue, targetBody);
             else
                 MoveLogic(input.moveValue, targetBody);
+
         }
 
         public override State Exit()
@@ -75,8 +77,6 @@ namespace Project.Player.Controlls
             float time = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
             float test = 2 + (Mathf.Cos(13 * time) + 1) * 3;
 
-            Debug.Log(test);
-
             Vector3 targetVelocity = body.transform.TransformDirection(vectorToAccelerate);
             Vector3 velocityChange = (targetVelocity - body.linearVelocity) * test;
             body.AddForce(velocityChange, ForceMode.Acceleration);
@@ -85,8 +85,6 @@ namespace Project.Player.Controlls
         {
             float time = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
             float test = 2 + (Mathf.Sin(13 * time) + 1) * 3;
-
-            Debug.Log(test);
 
             Vector3 targetVelocity = body.transform.TransformDirection(vectorToAccelerate);
             Vector3 velocityChange = (targetVelocity - body.linearVelocity) * test;
@@ -154,7 +152,7 @@ namespace Project.Player.Controlls
             isGrounded = false;
 
             //Anim
-            anim.SetTrigger("Jump");
+            anim.SetBool("Jump", true);
         }
 
         public override void Update()
@@ -180,10 +178,14 @@ namespace Project.Player.Controlls
         {
             if (input.moveValue != Vector2.zero && !input.jump)
             {
+                anim.SetBool("Jump", false);
                 return input.moveState;
             }
             if (input.moveValue == Vector2.zero && !input.jump)
+            {
+                anim.SetBool("Jump", false);
                 return input.idleState;
+            }
 
 
             return this;

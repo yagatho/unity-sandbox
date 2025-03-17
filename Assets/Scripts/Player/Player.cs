@@ -22,6 +22,9 @@ namespace Project.Player
         [Header("Souls-like")]
         public Transform SLcameraAnchor;
 
+        [Header("TEMPORARY DEBUG")]
+        public Bullet dedugBullet;
+
         //-- Hidden
         [HideInInspector] public Rigidbody myRigidbody;
         [HideInInspector] public Animator myAnimator;
@@ -41,6 +44,9 @@ namespace Project.Player
             //Initialzie statemachine
             stateMachine = new StateMachine();
 
+            //Debug
+            Lookup.playerStateMachine = stateMachine;
+
             //Initialize input handler
             input = new InputHandler();
             cameraController = new CameraController(virtualCameras, myCamera, this);
@@ -51,7 +57,6 @@ namespace Project.Player
         {
             //Update the state machine
             stateMachine.Update();
-            Debug.Log(stateMachine.GetState());
         }
 
         private void LateUpdate()

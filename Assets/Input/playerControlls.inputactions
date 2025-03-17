@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Console",
+                    "type": "Button",
+                    "id": "0fe517df-9709-4091-aedb-5877f15feeb5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -313,17 +322,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "e539a5df-2d7b-46fd-857e-7a78e55cbee4",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Peek",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "1D Axis",
                     "id": "bbdde11c-2bbe-45d6-8e4d-dc4c9806c95f",
                     "path": "1DAxis",
@@ -364,6 +362,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f963eeab-febf-4dae-a088-bd70ba3db9e9",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Console",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -89,6 +89,15 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fe517df-9709-4091-aedb-5877f15feeb5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -335,17 +344,6 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""e539a5df-2d7b-46fd-857e-7a78e55cbee4"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Peek"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""1D Axis"",
                     ""id"": ""bbdde11c-2bbe-45d6-8e4d-dc4c9806c95f"",
                     ""path"": ""1DAxis"",
@@ -386,6 +384,17 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f963eeab-febf-4dae-a088-bd70ba3db9e9"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Console"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -980,6 +989,7 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
         m_Player_ADS = m_Player.FindAction("ADS", throwIfNotFound: true);
         m_Player_Peek = m_Player.FindAction("Peek", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Console = m_Player.FindAction("Console", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1066,6 +1076,7 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ADS;
     private readonly InputAction m_Player_Peek;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Console;
     public struct PlayerActions
     {
         private @PlayerControlls m_Wrapper;
@@ -1077,6 +1088,7 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
         public InputAction @ADS => m_Wrapper.m_Player_ADS;
         public InputAction @Peek => m_Wrapper.m_Player_Peek;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Console => m_Wrapper.m_Player_Console;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1107,6 +1119,9 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Console.started += instance.OnConsole;
+            @Console.performed += instance.OnConsole;
+            @Console.canceled += instance.OnConsole;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1132,6 +1147,9 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Console.started -= instance.OnConsole;
+            @Console.performed -= instance.OnConsole;
+            @Console.canceled -= instance.OnConsole;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1321,6 +1339,7 @@ public partial class @PlayerControlls: IInputActionCollection2, IDisposable
         void OnADS(InputAction.CallbackContext context);
         void OnPeek(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnConsole(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

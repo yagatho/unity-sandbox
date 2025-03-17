@@ -1,5 +1,4 @@
 using UnityEngine;
-using Project.SettingsGroup;
 
 namespace Project.Player.Controlls
 {
@@ -31,7 +30,7 @@ namespace Project.Player.Controlls
             myPlayer = player;
             myInput = input;
             mask = LayerMask.GetMask("Ground");
-            CursorLock();
+            Utils.CursorLock();
         }
 
 
@@ -39,6 +38,9 @@ namespace Project.Player.Controlls
         //FUNCTIONS
         public void LookAround(Vector2 moveDelta)
         {
+            if (!Settings.canMoveCamera)
+                return;
+
             switch (myPlayer.characterControllerType)
             {
                 case ControllerType.FPS:
@@ -52,17 +54,23 @@ namespace Project.Player.Controlls
             }
         }
 
+        public void Recoil()
+        {
+            myPlayer.armsTransform.rotation *= Quaternion.Euler(-2, 0, 0);
+        }
+
         //Functions for FPS camera controller
         private void FPSCameraMovement(Vector2 moveDelta)
         {
             //Get yaw and pitch from the mouse movement delta
-            yaw += moveDelta.x * Settings.mouseSensitivity * Time.unscaledDeltaTime;
-            pitch -= moveDelta.y * Settings.mouseSensitivity * Time.unscaledDeltaTime;
+            yaw += moveDelta.x * Settings.mouseSensitivity;
+            pitch -= moveDelta.y * Settings.mouseSensitivity;
 
             pitch = Mathf.Clamp(pitch, -85, 85);
 
             //Rotate player main object on y axis by yaw
             myPlayer.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
             //Arm sway
             if (moveDelta.x != 0)
                 myPlayer.armsTransform.localRotation *= Quaternion.Euler(0f, -moveDelta.x / 100 * Settings.armSwayStrenght, 0f);
@@ -121,11 +129,5 @@ namespace Project.Player.Controlls
         }
 
 
-        //Lock 
-        public void CursorLock()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
     }
 }

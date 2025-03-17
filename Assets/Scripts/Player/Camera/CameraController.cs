@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Project.SettingsGroup;
 using UnityEngine;
 
 namespace Project.Player.CameraC
@@ -83,6 +82,7 @@ namespace Project.Player.CameraC
             lerpT = 0;
             lerpMult = Settings.adsSpeed;
         }
+
 
         //Souls-Like
         private void TpsCameraManagement()

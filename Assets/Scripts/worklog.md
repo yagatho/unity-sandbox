@@ -1,14 +1,12 @@
 #### OVERALL IDEAS AND LOG
 
 # TASKS
-- [ ] Peeks
 - [ ] Make arm sway upwards
 - [ ] Make sway while walking better 
 - [ ] Walking sideways head tilt
 - [ ] Turn animation
 - [ ] Walking sideways animation
 - [l] AI Integration
-- [ ] 
 
 # IDEA
 - [ ] Maybe change the settings class to localinstead of static? (New instance for each player instead of being global)

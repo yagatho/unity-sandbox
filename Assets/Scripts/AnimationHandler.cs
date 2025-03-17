@@ -1,5 +1,4 @@
 using UnityEngine;
-using Project.SettingsGroup;
 
 namespace Project.Player.Animations
 {
@@ -26,7 +25,9 @@ namespace Project.Player.Animations
             myAnimator.SetFloat("MoveDeltaY", moveDelta.y);
 
             if (run && Vector2.Angle(Vector2.up, moveDelta.normalized) <= 45)
+            {
                 myAnimator.SetBool("Run", true);
+            }
             else
                 myAnimator.SetBool("Run", false);
         }
