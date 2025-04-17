@@ -10,9 +10,20 @@ namespace Project.World
     /// </summary>
     public class World : MonoBehaviour
     {
+        //Variables
+        public Material worldMaterial;
+
+        //Functions
         void Start()
         {
-            ProceduralGeneration.GenerateWorld();
+            ProceduralGeneration.GenerateWorld(GenerationSettings.chunksToGenerate, transform);
+        }
+
+
+        // Get the instance of the world
+        public static World GetInstance()
+        {
+            return FindFirstObjectByType<World>();
         }
     }
 
