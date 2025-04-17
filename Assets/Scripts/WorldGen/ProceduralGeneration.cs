@@ -73,7 +73,7 @@ namespace Project.World
             }
 
             //Generate the mesh
-            MeshUtils.VertBasedMesh(myMesh);
+            MeshUtils.MakePlane(myMesh);
 
             myMesh.RecalculateNormals();
             myMesh.RecalculateBounds();
