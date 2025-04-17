@@ -8,6 +8,6 @@ namespace Project.World
         public const float chunkSize = 32;
 
         //Vert based
-        public const int chunkDensity = 7;
+        public const int chunkDensity = 4;
     }
 }

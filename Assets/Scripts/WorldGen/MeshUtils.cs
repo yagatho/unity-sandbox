@@ -10,6 +10,7 @@ namespace Project.World
         {
             mesh.Clear();
             int density = GenerationSettings.chunkDensity;
+            float size = GenerationSettings.chunkSize;
 
             // Primitives
             Vector3[] vertices = new Vector3[density * density];
@@ -17,15 +18,34 @@ namespace Project.World
             int[] triangles = new int[(density - 1) * (density - 1) * 6];
             int i = 0;
 
-            //Generate the mesh
+            //Generate the mesh verts and uvs
             for (int y = 0; y < density; y++)
             {
                 for (int x = 0; x < density; x++)
                 {
-                    // Vert
-                    vertices[i] = new Vector3(x, 0, y);
-                    uvs[i] = new Vector3(1 / density * x, 0, 1 / density * y);
+                    // Scale the vertices to the chunk size
+                    vertices[i] = new Vector3(x, 0, y) * (size / (density - 1));
+                    uvs[i] = new Vector2(x, y) / density;
                     i++;
+                }
+            }
+
+            //Generate the triangles
+            i = 0;
+            for (int y = 0; y < density - 1; y++)
+            {
+                for (int x = 0; x < density - 1; x++)
+                {
+                    int start = y * density + x;
+                    int nextRow = (y + 1) * density;
+
+                    triangles[i++] = start;
+                    triangles[i++] = nextRow + x;
+                    triangles[i++] = start + 1;
+
+                    triangles[i++] = nextRow + x;
+                    triangles[i++] = nextRow + x + 1;
+                    triangles[i++] = start + 1;
                 }
             }
 
