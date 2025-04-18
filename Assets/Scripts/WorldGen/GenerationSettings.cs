@@ -6,8 +6,7 @@ namespace Project.World
 
         //Chunk size is the size of the chunk in world units
         public const float chunkSize = 32;
-
-        //Vert based
+        //Chunk density is the number of vertices in the chunk
         public const int chunkDensity = 4;
     }
 }
