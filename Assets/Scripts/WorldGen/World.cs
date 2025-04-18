@@ -13,12 +13,30 @@ namespace Project.World
         //Variables
         public Material worldMaterial;
 
-        private Chunk[] chunks;
+        public Chunk[] chunks;
 
         //Functions
         void Start()
         {
             chunks = ProceduralGeneration.GenerateWorld(GenerationSettings.chunksToGenerate, transform);
+
+            // Get noise 
+            FastNoiseLite noise = new FastNoiseLite();
+            noise.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
+            noise.SetFrequency(0.01f);
+            noise.SetSeed(1341);
+
+            noise.SetFractalType(FastNoiseLite.FractalType.FBm);
+            noise.SetFractalOctaves(3);
+            noise.SetFractalLacunarity(2.17f);
+            noise.SetFractalGain(0.62f);
+            noise.SetFractalWeightedStrength(0);
+
+            noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.BasicGrid);
+            noise.SetDomainWarpAmp(2.5f);
+
+            // Terraform the chunks
+            ProceduralGeneration.TerraformChunks(chunks, noise);
         }
 
 

@@ -20,7 +20,7 @@ namespace Project.World
             {
                 for (int x = 0; x < chunksToGenerate; x++)
                 {
-                    chunks[chunkIndex] = GenerateChunk(new Vector2Int(x, y), parent);
+                    chunks[chunkIndex++] = GenerateChunk(new Vector2Int(x, y), parent);
                 }
             }
 
@@ -50,18 +50,45 @@ namespace Project.World
 
             return chunk;
         }
+
+        public static void TerraformChunks(Chunk[] chunks, FastNoiseLite noise)
+        {
+            //Loop through the chunks and terraform them
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                TerraformChunk(chunks[i], noise);
+            }
+        }
+
+        public static void TerraformChunk(Chunk chunk, FastNoiseLite noise)
+        {
+            //Loop through the vertices and change their height
+            Vector3[] vertices = chunk.myMesh.vertices;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                // Get the global position of the vertex
+                Vector3 vertGlobalPos = vertices[i] + new Vector3(chunk.position.x, 0, chunk.position.y) * GenerationSettings.chunkSize;
+
+                // Set the height of the vertex based on the noise
+                float h = noise.GetNoise(vertGlobalPos.x, vertGlobalPos.z) * 5;
+                vertices[i].y += Mathf.Pow(h, 4);
+            }
+
+            chunk.myMesh.vertices = vertices;
+        }
     }
 
+    [System.Serializable]
     public struct Chunk
     {
         public Vector2Int position;
         public Mesh myMesh;
 
         //Initializes the chunk with a position and a mesh
-        public Chunk(Vector2Int position, Mesh myMesh)
+        public Chunk(Vector2Int _position, Mesh _myMesh)
         {
-            this.position = position;
-            this.myMesh = myMesh;
+            this.position = _position;
+            this.myMesh = _myMesh;
         }
 
         public void GenerateMesh()

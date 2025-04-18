@@ -24,7 +24,7 @@ namespace Project.World
                 for (int x = 0; x < density; x++)
                 {
                     // Scale the vertices to the chunk size
-                    vertices[i] = new Vector3(x, Mathf.PerlinNoise(x, y), y) * (size / (density - 1));
+                    vertices[i] = new Vector3(x, 0, y) * (size / (density - 1));
                     uvs[i] = new Vector2(x, y) / density;
                     i++;
                 }
