@@ -13,10 +13,12 @@ namespace Project.World
         //Variables
         public Material worldMaterial;
 
+        private Chunk[] chunks;
+
         //Functions
         void Start()
         {
-            ProceduralGeneration.GenerateWorld(GenerationSettings.chunksToGenerate, transform);
+            chunks = ProceduralGeneration.GenerateWorld(GenerationSettings.chunksToGenerate, transform);
         }
 
 
